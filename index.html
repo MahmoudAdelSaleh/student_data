@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة استخراج بيانات الطلاب (نسخة نهائية)</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --hover-color: #004494;
+            --success-color: #28a745;
+        }
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            border-top: 5px solid var(--primary-color);
+        }
+        h1, h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        p, li {
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .instructions {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-color);
+        }
+        .bookmarklet-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: move;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
+        }
+        .bookmarklet-link:hover {
+            background-color: var(--hover-color);
+            transform: scale(1.05);
+        }
+        .code-container {
+            position: relative;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-family: monospace;
+            font-size: 14px;
+            direction: ltr;
+            resize: vertical;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            left: 10px; 
+            padding: 8px 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .copy-button:hover {
+            background-color: var(--hover-color);
+        }
+        .copy-button.copied {
+            background-color: var(--success-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>أداة استخراج بيانات الطلاب (نسخة نهائية)</h1>
+            <p>تم إصلاح الأخطاء السابقة في هذه النسخة. الرجاء استخدام الزر المحدث.</p>
+        </header>
+
+        <main>
+            <section id="bookmarklet">
+                <h2>1. الطريقة الأسهل: الزر السحري (Bookmarklet)</h2>
+                <div class="instructions">
+                    <p><strong>الخطوة الأهم:</strong> اسحب وأفلت الزر التالي في شريط الإشارات المرجعية (Bookmarks Bar).</p>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a class="bookmarklet-link" href="javascript:(async function(){const s='.paginate_button.next:not(.disabled)';let d=[];function f1(){const t=document.querySelector('table');if(!t)return;const n=t.querySelectorAll('tr');if(d.length===0){const t=Array.from(n[0].querySelectorAll('th')).map(t=>t.innerText.trim());d.push(t)}for(let t=1;t<n.length;t++){const e=Array.from(n[t].querySelectorAll('td')).map(t=>t.innerText.trim());e.length>0&&d.push(e)}}function f2(t){const e='\uFEFF';let n=t.map(t=>t.map(t=>`%22${String(t).split('%22').join('%22%22')}%22`).join(',')).join('\n');const o=new Blob([e+n],{type:'text/csv;charset=utf-8;'});const r=document.createElement('a'),a=URL.createObjectURL(o);r.setAttribute('href',a),r.setAttribute('download','student_data.csv'),r.style.visibility='hidden',document.body.appendChild(r),r.click(),document.body.removeChild(r)}async function f3(){for(;;){f1();const t=document.querySelector(s);if(t){t.click();await new Promise(t=>setTimeout(t,2e3))}else break}f2(d)}f3()})();">📊 استخراج البيانات (نسخة نهائية)</a>
+                    </div>
+                     <p><strong>كيفية الاستخدام:</strong></p>
+                    <ol>
+                        <li>اذهب إلى صفحة بيانات الطلاب.</li>
+                        <li>اضغط على زر "📊 استخراج البيانات (نسخة نهائية)" الذي وضعته في شريط الإشارات.</li>
+                        <li>انتظر حتى يتم تحميل الملف تلقائياً.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="manual">
+                <h2>2. الطريقة اليدوية: نسخ الكود</h2>
+                <p>إذا لم تعمل الطريقة الأولى، فهذه الطريقة مضمونة. انسخ الكود من هنا والصقه في الكونسول.</p>
+                <div class="code-container">
+                    <button id="copyBtn" class="copy-button" onclick="copyCode()">نسخ الكود</button>
+                    <textarea id="scraperCode" readonly>
+(async function main() {
+    console.log("بدء عملية جلب البيانات...");
+    const nextButtonSelector = '.paginate_button.next:not(.disabled)';
+    let allData = [];
+
+    function scrapeCurrentPage() {
+        const table = document.querySelector('table');
+        if (!table) { console.error("لم يتم العثور على جدول في الصفحة."); return; }
+        const rows = table.querySelectorAll('tr');
+        if (allData.length === 0) {
+            const headers = Array.from(rows[0].querySelectorAll('th')).map(h => h.innerText.trim());
+            allData.push(headers);
+        }
+        for (let i = 1; i < rows.length; i++) {
+            const cells = Array.from(rows[i].querySelectorAll('td')).map(c => c.innerText.trim());
+            if(cells.length > 0) allData.push(cells);
+        }
+        console.log(`تم جلب ${allData.length - 1} سجل حتى الآن.`);
+    }
+
+    function downloadCSV(data) {
+        if (data.length <= 1) { console.log("لا توجد بيانات لتنزيلها."); return; }
+        const bom = "\uFEFF";
+        // استخدام split().join() بدلاً من replace() لتجنب أخطاء Regular Expression
+        let csvContent = data.map(row =>
+            row.map(cell => `"${String(cell).split('"').join('""')}"`).join(',')
+        ).join('\n');
+        
+        const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "student_data.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        console.log('جاري تنزيل ملف الإكسيل (CSV)...');
+        link.click();
+        document.body.removeChild(link);
+    }
+    
+    // Main loop
+    while (true) {
+        scrapeCurrentPage();
+        const nextButton = document.querySelector(nextButtonSelector);
+        if (nextButton) {
+            console.log('الانتقال إلى الصفحة التالية...');
+            nextButton.click();
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        } else {
+            console.log('تم الوصول إلى آخر صفحة.');
+            break;
+        }
+    }
+
+    console.log(`اكتمل جلب البيانات. إجمالي السجلات: ${allData.length - 1}`);
+    downloadCSV(allData);
+})();
+                    </textarea>
+                </div>
+            </section>
+        </main>
+        
+    </div>
+
+    <script>
+        function copyCode() {
+            const textarea = document.getElementById('scraperCode');
+            navigator.clipboard.writeText(textarea.value).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = 'تم النسخ!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'نسخ الكود';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>
