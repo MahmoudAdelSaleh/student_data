@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أداة استخراج بيانات الطلاب (نسخة نهائية)</title>
+    <title>أداة استخراج بيانات الطلاب (طلب نقل- بحث عن كود)</title>
     <style>
         :root {
             --primary-color: #0056b3;
@@ -103,22 +103,22 @@
 
     <div class="container">
         <header>
-            <h1>أداة استخراج بيانات الطلاب (نسخة نهائية)</h1>
-            <p>تم إصلاح الأخطاء السابقة في هذه النسخة. الرجاء استخدام الزر المحدث.</p>
+            <h1>أداة استخراج بيانات الطلاب (طلب نقل- بحث عن كود)</h1>
+            <p> مع تحيات استاذ/ محمود عادل صالح </p>
         </header>
 
         <main>
             <section id="bookmarklet">
-                <h2>1. الطريقة الأسهل: الزر السحري (Bookmarklet)</h2>
+                <h2> هيا : استعد  لتلقي بيانات تلاميذ مدرستك صفا صفا  (Bookmarklet)</h2>
                 <div class="instructions">
-                    <p><strong>الخطوة الأهم:</strong> اسحب وأفلت الزر التالي في شريط الإشارات المرجعية (Bookmarks Bar).</p>
+                    <p><strong>لا تنسى :</strong> اسحب وأفلت الزر التالي في شريط الإشارات المرجعية (Bookmarks Bar).</p>
                     <div style="text-align: center; margin: 20px 0;">
                         <a class="bookmarklet-link" href="javascript:(async function(){const s='.paginate_button.next:not(.disabled)';let d=[];function f1(){const t=document.querySelector('table');if(!t)return;const n=t.querySelectorAll('tr');if(d.length===0){const t=Array.from(n[0].querySelectorAll('th')).map(t=>t.innerText.trim());d.push(t)}for(let t=1;t<n.length;t++){const e=Array.from(n[t].querySelectorAll('td')).map(t=>t.innerText.trim());e.length>0&&d.push(e)}}function f2(t){const e='\uFEFF';let n=t.map(t=>t.map(t=>`%22${String(t).split('%22').join('%22%22')}%22`).join(',')).join('\n');const o=new Blob([e+n],{type:'text/csv;charset=utf-8;'});const r=document.createElement('a'),a=URL.createObjectURL(o);r.setAttribute('href',a),r.setAttribute('download','student_data.csv'),r.style.visibility='hidden',document.body.appendChild(r),r.click(),document.body.removeChild(r)}async function f3(){for(;;){f1();const t=document.querySelector(s);if(t){t.click();await new Promise(t=>setTimeout(t,2e3))}else break}f2(d)}f3()})();">📊 استخراج البيانات (نسخة نهائية)</a>
                     </div>
                      <p><strong>كيفية الاستخدام:</strong></p>
                     <ol>
-                        <li>اذهب إلى صفحة بيانات الطلاب.</li>
-                        <li>اضغط على زر "📊 استخراج البيانات (نسخة نهائية)" الذي وضعته في شريط الإشارات.</li>
+                        <li> اذهب الى صفحة بيانات التلميذ-تبويب نقل الملف الإلكتروني-تسجيل طلب نقل -بحث عن كود-اختر صف   </li>
+                        <li>اضغط على زر "📊 استخراج البيانات " الذي وضعته في شريط الإشارات.</li>
                         <li>انتظر حتى يتم تحميل الملف تلقائياً.</li>
                     </ol>
                 </div>
