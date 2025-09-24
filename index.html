@@ -104,7 +104,7 @@
     <div class="container">
         <header>
             <h1>أداة استخراج بيانات الطلاب (طلب نقل- بحث عن كود)</h1>
-            <p> مع تحيات استاذ/ محمود عادل صالح </p>
+            <h2> مع تحيات استاذ/ محمود عادل صالح </h2>
         </header>
 
         <main>
@@ -113,7 +113,7 @@
                 <div class="instructions">
                     <p><strong>لا تنسى :</strong> اسحب وأفلت الزر التالي في شريط الإشارات المرجعية (Bookmarks Bar).</p>
                     <div style="text-align: center; margin: 20px 0;">
-                        <a class="bookmarklet-link" href="javascript:(async function(){const s='.paginate_button.next:not(.disabled)';let d=[];function f1(){const t=document.querySelector('table');if(!t)return;const n=t.querySelectorAll('tr');if(d.length===0){const t=Array.from(n[0].querySelectorAll('th')).map(t=>t.innerText.trim());d.push(t)}for(let t=1;t<n.length;t++){const e=Array.from(n[t].querySelectorAll('td')).map(t=>t.innerText.trim());e.length>0&&d.push(e)}}function f2(t){const e='\uFEFF';let n=t.map(t=>t.map(t=>`%22${String(t).split('%22').join('%22%22')}%22`).join(',')).join('\n');const o=new Blob([e+n],{type:'text/csv;charset=utf-8;'});const r=document.createElement('a'),a=URL.createObjectURL(o);r.setAttribute('href',a),r.setAttribute('download','student_data.csv'),r.style.visibility='hidden',document.body.appendChild(r),r.click(),document.body.removeChild(r)}async function f3(){for(;;){f1();const t=document.querySelector(s);if(t){t.click();await new Promise(t=>setTimeout(t,2e3))}else break}f2(d)}f3()})();">📊 استخراج البيانات (نسخة نهائية)</a>
+                        <a class="bookmarklet-link" href="javascript:(async function(){const s='.paginate_button.next:not(.disabled)';let d=[];function f1(){const t=document.querySelector('table');if(!t)return;const n=t.querySelectorAll('tr');if(d.length===0){const t=Array.from(n[0].querySelectorAll('th')).map(t=>t.innerText.trim());d.push(t)}for(let t=1;t<n.length;t++){const e=Array.from(n[t].querySelectorAll('td')).map(t=>t.innerText.trim());e.length>0&&d.push(e)}}function f2(t){const e='\uFEFF';let n=t.map(t=>t.map(t=>`%22${String(t).split('%22').join('%22%22')}%22`).join(',')).join('\n');const o=new Blob([e+n],{type:'text/csv;charset=utf-8;'});const r=document.createElement('a'),a=URL.createObjectURL(o);r.setAttribute('href',a),r.setAttribute('download','student_data.csv'),r.style.visibility='hidden',document.body.appendChild(r),r.click(),document.body.removeChild(r)}async function f3(){for(;;){f1();const t=document.querySelector(s);if(t){t.click();await new Promise(t=>setTimeout(t,2e3))}else break}f2(d)}f3()})();">📊 استخراج البيانات</a>
                     </div>
                      <p><strong>كيفية الاستخدام:</strong></p>
                     <ol>
