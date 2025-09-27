@@ -131,7 +131,7 @@
             transform: scale(1.05);
         }
 
-        /* --- START: New CSS for Counter and Comments --- */
+        /* --- CSS for Counter and Comments --- */
         .visitor-counter {
             display: flex;
             align-items: center;
@@ -222,9 +222,26 @@
             white-space: pre-wrap; /* Preserve line breaks in comments */
             word-wrap: break-word;
         }
+
+        /* --- START: New CSS for instructions typewriter --- */
+        .instructions ol li {
+            position: relative;
+        }
+        .instructions ol li.typing::after {
+            content: '▋'; /* Using a block character for the cursor */
+            color: var(--text-color);
+            animation: blink-cursor 1s infinite;
+            position: absolute;
+            left: -5px; /* Position cursor to the left for RTL text */
+            top: 0;
+        }
+        @keyframes blink-cursor {
+            50% { opacity: 0; }
+        }
         /* --- END: New CSS --- */
 
-        /* تحسينات للاستجابة */
+
+        /* Responsive improvements */
         @media (max-width: 768px) {
             .container {
                 width: 95%;
@@ -257,7 +274,7 @@
 
             <main>
                 <section id="bookmarklet">
-                    <h2>هيا : استعد لتلقي بيانات تلاميذ مدرستك صفا صفا </h2>
+                    <h2>هيا : استعد لتلقي بيانات تلاميذ مدرستك صفا صفا (Bookmarklet)</h2>
                     <div class="instructions">
                         <p><strong>لا تنسى :</strong> اسحب وأفلت الزر التالي في شريط الإشارات المرجعية (Bookmarks Bar).</p>
                         <div style="text-align: center; margin: 20px 0;">
@@ -272,14 +289,13 @@
                     </div>
                 </section>
                 
-                <!-- --- START: Visitor Counter --- -->
+                <!-- Visitor Counter -->
                 <div class="visitor-counter">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                     <span>إجمالي الزوار: <strong id="visitor-count-number">...</strong></span>
                 </div>
-                <!-- --- END: Visitor Counter --- -->
 
-                <!-- --- START: Comments Section --- -->
+                <!-- Comments Section -->
                 <section class="comments-section" id="comments">
                     <h2>شاركنا رأيك أو استفسارك ✏️</h2>
                     <form id="comment-form" class="comment-form">
@@ -291,19 +307,22 @@
                         <!-- Comments will be loaded here dynamically -->
                     </div>
                 </section>
-                <!-- --- END: Comments Section --- -->
 
             </main>
         </div>
     </div>
     
-    <!-- IMPORTANT: The script below is now a module to support modern Firebase SDK -->
+    <!-- Use type="module" for modern Firebase SDK -->
     <script type="module">
-        // --- START: Rainbow Text Effect Script (Your original script) ---
+        // Import functions from the Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, onValue, runTransaction, push, child, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        // --- Rainbow Text Effect Script ---
         function applyRainbowColors(element) {
             if (!element || !element.innerText) return;
             const words = element.innerText.split(' ');
-            element.innerHTML = ''; // Clear the original text
+            element.innerHTML = '';
             let wordIndex = 0;
             words.forEach((word, index) => {
                 if (word.trim() !== '') {
@@ -324,68 +343,68 @@
                 }
             });
         }
-        window.addEventListener('DOMContentLoaded', (event) => {
-            const elementsToColor = document.querySelectorAll('#main-title, #sub-title, #bookmarklet h2, .instructions p, .instructions li, #marquee-text, #comments h2');
-            elementsToColor.forEach(applyRainbowColors);
-        });
-        // --- END: Rainbow Text Effect Script ---
 
+        // --- START: New Typewriter function for instructions ---
+        async function typeInstructions() {
+            const steps = document.querySelectorAll('.instructions ol li');
+            const lines = Array.from(steps).map(el => el.innerHTML); // Store original text
 
-        // --- START: Firebase 9+ (Modular) Logic ---
+            // Clear all list items to start the effect
+            steps.forEach(el => el.innerHTML = '');
 
-        // 1. Import functions from the Firebase SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getDatabase, ref, runTransaction, onValue, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+            const delay = ms => new Promise(res => setTimeout(res, ms));
 
-        // =======================================================================
-        // 2. ضع إعدادات Firebase الخاصة بك هنا
-        // =======================================================================
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDSJokERBN7HMjUBxVUYhl3q8Nrl3lc0rA",
-  authDomain: "student-data-b0538.firebaseapp.com",
-  projectId: "student-data-b0538",
-  storageBucket: "student-data-b0538.firebasestorage.app",
-  messagingSenderId: "817668351231",
-  appId: "1:817668351231:web:28f028964244cf039dd8ca",
-  measurementId: "G-8YY5KMH9DL"
-};
-        // =======================================================================
-
-        // 3. Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // 4. Visitor Counter Logic
-        const visitorCountRef = ref(db, 'visitors/count');
-        const visitorCountElement = document.getElementById('visitor-count-number');
-
-        // Increment count using a transaction to prevent race conditions
-        runTransaction(visitorCountRef, (currentCount) => {
-            return (currentCount || 0) + 1;
-        });
-
-        // Listen for changes and update the display
-        onValue(visitorCountRef, (snapshot) => {
-            const count = snapshot.val();
-            if (visitorCountElement) {
-                visitorCountElement.textContent = count;
+            for (let i = 0; i < steps.length; i++) {
+                const currentLine = steps[i];
+                currentLine.classList.add('typing'); // Add cursor
+                
+                const text = lines[i];
+                // Type out the text character by character
+                for (let j = 0; j < text.length; j++) {
+                    currentLine.innerHTML = text.substring(0, j + 1);
+                    await delay(120); // Typing speed
+                }
+                
+                currentLine.classList.remove('typing'); // Remove cursor after finishing
+                await delay(2000); // Pause before starting the next line
             }
+        }
+        // --- END: New Typewriter function ---
+
+
+        // --- Firebase Logic ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDSJokERBN7HMjUBxVUYhl3q8Nrl3lc0rA",
+            authDomain: "student-data-b0538.firebaseapp.com",
+            databaseURL: "https://student-data-b0538-default-rtdb.firebaseio.com",
+            projectId: "student-data-b0538",
+            storageBucket: "student-data-b0538.appspot.com",
+            messagingSenderId: "817668351231",
+            appId: "1:817668351231:web:28f028964244cf039dd8ca",
+            measurementId: "G-8YY5KMH9DL"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Visitor Counter Logic
+        const visitorCountRef = ref(database, 'visitors/count');
+        const visitorCountElement = document.getElementById('visitor-count-number');
+        runTransaction(visitorCountRef, (currentCount) => (currentCount || 0) + 1);
+        onValue(visitorCountRef, (snapshot) => {
+            if (visitorCountElement) visitorCountElement.textContent = snapshot.val();
         });
 
-        // 5. Comments Logic
+        // Comments Logic
         const commentForm = document.getElementById('comment-form');
         const commentsContainer = document.getElementById('comments-container');
-        const commentsRef = ref(db, 'comments');
+        const commentsRef = ref(database, 'comments');
 
-        // Handle Form Submission
         commentForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
             const nameInput = document.getElementById('comment-name');
             const messageInput = document.getElementById('comment-message');
-            
-            let name = nameInput.value.trim();
+            let name = nameInput.value.trim() || `زائر رقم ${Math.floor(Math.random() * 1000)}`;
             const message = messageInput.value.trim();
             
             if (!message) {
@@ -393,34 +412,29 @@ const firebaseConfig = {
                 return;
             }
             
-            // Default name if left blank
-            if (!name) {
-                name = `زائر رقم ${Math.floor(Math.random() * 1000)}`;
-            }
-            
-            // Create comment object to push to Firebase
-            const newComment = {
+            push(commentsRef, {
                 author: name,
                 text: message,
-                timestamp: new Date().toISOString() // Store date as a standardized string
-            };
-            
-            // Push to Firebase and clear form
-            push(commentsRef, newComment);
+                timestamp: new Date().toISOString()
+            });
             nameInput.value = '';
             messageInput.value = '';
         });
 
-        // Listen for new comments and display them
-        onChildAdded(commentsRef, (snapshot) => {
-            const comment = snapshot.val();
-            
-            // Create the HTML for the new comment
+        // Fetch and display existing comments
+        get(child(commentsRef, '/')).then((snapshot) => {
+            if (snapshot.exists()) {
+                commentsContainer.innerHTML = '';
+                const comments = snapshot.val();
+                const commentKeys = Object.keys(comments).reverse(); // Newest first
+                commentKeys.forEach(key => displayComment(comments[key]));
+            }
+        });
+
+        function displayComment(comment) {
             const commentDiv = document.createElement('div');
             commentDiv.className = 'comment-display';
-            
             const commentDate = new Date(comment.timestamp).toLocaleString('ar-EG');
-            
             commentDiv.innerHTML = `
                 <div class="comment-header">
                     <span class="comment-author">${comment.author}</span>
@@ -428,11 +442,20 @@ const firebaseConfig = {
                 </div>
                 <p class="comment-body">${comment.text}</p>
             `;
-            
-            // Add the new comment to the top of the container
-            commentsContainer.prepend(commentDiv);
+            commentsContainer.appendChild(commentDiv);
+        }
+
+        // Apply effects after DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Apply rainbow effect to specific elements, excluding the list items
+            const elementsToColor = document.querySelectorAll('#main-title, #sub-title, #bookmarklet h2, .instructions p, #marquee-text, #comments h2');
+            elementsToColor.forEach(applyRainbowColors);
+
+            // Start the typewriter effect for the instruction list
+            typeInstructions();
         });
-        // --- END: Firebase Logic ---
+
     </script>
 </body>
 </html>
+
