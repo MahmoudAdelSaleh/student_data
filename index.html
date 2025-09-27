@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أداة استخراج بيانات الطلاب (طلب نقل- بحث عن كود)</title>
+    <title> (أداة استخراج بيانات الطلاب )</title>
     <style>
         :root {
             --primary-color: #0056b3;
-            --secondary-color: #f8f9fa;
-            --text-color: #333;
-            --border-color: #dee2e6;
+            --secondary-color: #000000; /* Changed to black */
+            --text-color: #f5f5f5; /* Changed for dark bg */
+            --border-color: #555555; /* Changed for dark bg */
             --hover-color: #004494;
             --success-color: #28a745;
         }
@@ -23,30 +23,79 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            text-align: center; /* Center all text */
+            padding-top: 70px; /* Add padding to avoid overlap with marquee */
+        }
+        .marquee-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1c1c1c;
+            padding: 12px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .marquee-container a {
+            color: white;
+            text-decoration: none;
+            font-size: 2.2em;
+            display: inline-flex;
+            align-items: Center;
+            gap: 15px;
+        }
+        .whatsapp-icon {
+            width: 40px;
+            height: 40px;
+            fill: #25D366; /* WhatsApp green */
         }
         .container {
-            background-color: white;
+            background-color: #111; /* Fallback */
+            background-image: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 25px,
+                    rgba(192, 192, 192, 0.1) 25px,
+                    rgba(192, 192, 192, 0.1) 27px
+                ),
+                linear-gradient(
+                    160deg,
+                    #000000 0%,
+                    #1c1c1c 40%,
+                    #4d4d4d 100%
+                );
+            color: var(--text-color);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.5);
             max-width: 800px;
             width: 100%;
             border-top: 5px solid var(--primary-color);
         }
         h1, h2 {
-            color: var(--primary-color);
+            /* color is now set by JS */
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
+            cursor: default;
         }
         p, li {
             line-height: 1.8;
             font-size: 16px;
         }
         .instructions {
-            background-color: #e9ecef;
+            background-color: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 15px;
             border-radius: 8px;
             border-left: 5px solid var(--primary-color);
+            margin-top: 20px;
+        }
+        /* Keep list text aligned to the right for readability */
+        .instructions ol {
+            text-align: right;
+            display: inline-block; /* This helps with centering the block */
+            padding-right: 40px; /* Adjust padding for list styling */
         }
         .bookmarklet-link {
             display: inline-block;
@@ -65,93 +114,85 @@
             background-color: var(--hover-color);
             transform: scale(1.05);
         }
-        .code-container {
-            position: relative;
-        }
-        textarea {
-            width: 100%;
-            height: 200px;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-family: monospace;
-            font-size: 14px;
-            direction: ltr;
-            resize: vertical;
-        }
-        .copy-button {
-            position: absolute;
-            top: 10px;
-            left: 10px; 
-            padding: 8px 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .copy-button:hover {
-            background-color: var(--hover-color);
-        }
-        .copy-button.copied {
-            background-color: var(--success-color);
-        }
     </style>
 </head>
 <body>
 
+    <div class="marquee-container">
+    <marquee behavior="scroll" direction="right" scrollamount="6">
+        <a href="https://wa.me/201552402912" target="_blank" rel="noopener noreferrer">
+            <span id="marquee-text">مع تحيات استاذ/ محمود عادل صالح</span>
+            <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2.01c-5.52 0-9.99 4.47-9.99 9.99 0 1.77.46 3.45 1.28 4.92L2.01 22l5.25-1.37c1.42.75 3.02 1.2 4.78 1.2h.01c5.52 0 9.99-4.47 9.99-9.99s-4.47-9.99-9.99-9.99zM12.04 20.14h-.01c-1.6 0-3.13-.38-4.49-1.07l-.32-.19-3.33.87.89-3.25-.21-.34c-.79-1.28-1.21-2.78-1.21-4.34 0-4.41 3.58-7.99 7.99-7.99 2.21 0 4.21.86 5.66 2.31 1.45 1.45 2.31 3.45 2.31 5.66-.01 4.41-3.59 7.99-8 7.99zm4.83-5.9c-.27-.13-1.58-.78-1.82-.87-.25-.09-.43-.13-.61.13-.19.27-.69.87-.85 1.04-.16.17-.32.19-.59.06-.27-.13-1.15-.42-2.19-1.35-.81-.72-1.36-1.61-1.52-1.88-.16-.27-.02-.42.12-.55.12-.12.27-.3.4-.45.13-.15.17-.25.25-.42.09-.17.04-.31-.02-.44s-.61-1.45-.83-1.98c-.22-.52-.45-.45-.61-.46-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.02 2.56.12.17 1.76 2.68 4.27 3.77 2.51 1.08 2.51.72 2.96.69.45-.03 1.58-.64 1.8-1.25.23-.61.23-1.13.16-1.25-.07-.12-.25-.19-.52-.32z"/></svg>
+        </a>
+    </marquee>
+</div>
+
     <div class="container">
         <header>
-            <h1>أداة استخراج بيانات الطلاب (طلب نقل- بحث عن كود)</h1>
-            <h2> مع تحيات استاذ/ محمود عادل صالح </h2>
+            <h1 id="main-title"> أداة استخراج بيانات التلميذ </h1>
+            <h2 id="sub-title"> مع تحيات استاذ/ محمود عادل صالح </h2>
         </header>
 
         <main>
             <section id="bookmarklet">
-                <h2> هيا : استعد  لتلقي بيانات تلاميذ مدرستك صفا صفا  (Bookmarklet)</h2>
+                <h2>هيا : استعد لتلقي بيانات تلاميذ مدرستك صفا صفا (Bookmarklet)</h2>
                 <div class="instructions">
                     <p><strong>لا تنسى :</strong> اسحب وأفلت الزر التالي في شريط الإشارات المرجعية (Bookmarks Bar).</p>
                     <div style="text-align: center; margin: 20px 0;">
                         <a class="bookmarklet-link" href="javascript:(async function(){const s='.paginate_button.next:not(.disabled)';let d=[];function f1(){const t=document.querySelector('table');if(!t)return;const n=t.querySelectorAll('tr');if(d.length===0){const t=Array.from(n[0].querySelectorAll('th')).map(t=>t.innerText.trim());d.push(t)}for(let t=1;t<n.length;t++){const e=Array.from(n[t].querySelectorAll('td')).map(t=>t.innerText.trim());e.length>0&&d.push(e)}}function f2(t){const e='\uFEFF';let n=t.map(t=>t.map(t=>`%22${String(t).split('%22').join('%22%22')}%22`).join(',')).join('\n');const o=new Blob([e+n],{type:'text/csv;charset=utf-8;'});const r=document.createElement('a'),a=URL.createObjectURL(o);r.setAttribute('href',a),r.setAttribute('download','student_data.csv'),r.style.visibility='hidden',document.body.appendChild(r),r.click(),document.body.removeChild(r)}async function f3(){for(;;){f1();const t=document.querySelector(s);if(t){t.click();await new Promise(t=>setTimeout(t,2e3))}else break}f2(d)}f3()})();">📊 استخراج البيانات</a>
                     </div>
                      <p><strong>كيفية الاستخدام:</strong></p>
-                    <ol>
-                        <li> اذهب الى صفحة بيانات التلميذ-تبويب نقل الملف الإلكتروني-تسجيل طلب نقل -بحث عن كود-اختر صف   </li>
-                        <li>اضغط على زر "📊 استخراج البيانات " الذي وضعته في شريط الإشارات.</li>
-                        <li>انتظر حتى يتم تحميل الملف تلقائياً.</li>
-                    </ol>
-                </div>
-            </section>
-
-            <section id="manual">
-                <h2>2. الطريقة اليدوية: نسخ الكود</h2>
-                <p>إذا لم تعمل الطريقة الأولى، فهذه الطريقة مضمونة. انسخ الكود من هنا والصقه في الكونسول.</p>
-                <div class="code-container">
-                    <button id="copyBtn" class="copy-button" onclick="copyCode()">نسخ الكود</button>
-                    <textarea id="scraperCode" readonly>
-                                تم حذف الكود
-                          يرجى الاكتفاء بزر استخراج البيانات فقط 
-                    </textarea>
+                     <ol>
+                         <li> اذهب الى صفحة بيانات التلميذ-تبويب نقل الملف الإلكتروني-تسجيل طلب نقل -بحث عن كود-اختر صف </li>
+                         <li>اضغط على زر "📊 استخراج البيانات " الذي وضعته في شريط الإشارات.</li>
+                         <li>انتظر حتى يتم تحميل الملف تلقائياً.</li>
+                     </ol>
                 </div>
             </section>
         </main>
-        
     </div>
 
     <script>
-        function copyCode() {
-            const textarea = document.getElementById('scraperCode');
-            navigator.clipboard.writeText(textarea.value).then(() => {
-                const btn = document.getElementById('copyBtn');
-                btn.textContent = 'تم النسخ!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = 'نسخ الكود';
-                    btn.classList.remove('copied');
-                }, 2000);
+        // Function to apply rainbow colors to each word of an element's text
+        function applyRainbowColors(element) {
+            if (!element || !element.innerText) return;
+
+            const words = element.innerText.split(' ');
+            element.innerHTML = ''; // Clear the original text
+
+            let wordIndex = 0;
+            words.forEach((word, index) => {
+                if (word.trim() !== '') {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.innerText = word;
+                    // Cycle through hues for a pleasant rainbow effect per word
+                    const hue = (wordIndex * 35) % 360; 
+                    wordSpan.style.color = `hsl(${hue}, 90%, 50%)`;
+                    
+                    // Add hover effect styles directly
+                    wordSpan.style.display = 'inline-block';
+                    wordSpan.style.transition = 'transform 0.2s ease-in-out';
+                    wordSpan.style.cursor = 'pointer';
+                    
+                    // Add hover event listeners
+                    wordSpan.addEventListener('mouseenter', () => wordSpan.style.transform = 'scale(1.2)');
+                    wordSpan.addEventListener('mouseleave', () => wordSpan.style.transform = 'scale(1)');
+
+                    element.appendChild(wordSpan);
+                    wordIndex++;
+                }
+                // Add a space after each word to preserve sentence structure
+                if (index < words.length - 1) {
+                    element.appendChild(document.createTextNode(' '));
+                }
             });
         }
+
+        // Apply the effect when the page is loaded
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const elementsToColor = document.querySelectorAll('#main-title, #sub-title, #bookmarklet h2, .instructions p, .instructions li, #marquee-text');
+            elementsToColor.forEach(applyRainbowColors);
+        });
     </script>
 
 </body>
