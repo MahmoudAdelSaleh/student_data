@@ -12,6 +12,7 @@
             --border-color: #555555;
             --hover-color: #004494;
             --success-color: #28a745;
+            --comment-bg: #2a2a2a;
         }
         body {
             font-family: 'Tahoma', sans-serif;
@@ -36,7 +37,7 @@
             height: 50px;
         }
         .marquee-container marquee {
-            white-space: nowrap; 
+            white-space: nowrap;  
         }
         .marquee-container a {
             color: white;
@@ -129,34 +130,111 @@
             background-color: var(--hover-color);
             transform: scale(1.05);
         }
+
+        /* --- START: New CSS for Counter and Comments --- */
+        .visitor-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            font-size: 1.1em;
+            border-left: 5px solid var(--success-color);
+        }
+        .visitor-counter svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+        }
         
+        .comments-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .comment-form input, .comment-form textarea {
+            width: calc(100% - 24px); /* Account for padding */
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: #333;
+            color: var(--text-color);
+            font-family: 'Tahoma', sans-serif;
+            font-size: 16px;
+        }
+        .comment-form input::placeholder, .comment-form textarea::placeholder {
+            color: #aaa;
+        }
+        .comment-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .comment-form button {
+            padding: 12px 20px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .comment-form button:hover {
+            background-color: #218838;
+        }
+
+        .comments-container {
+            text-align: right;
+        }
+        .comment-display {
+            background-color: var(--comment-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-right: 4px solid var(--primary-color);
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #4dabf7; /* Light blue for author name */
+        }
+        .comment-date {
+            font-size: 0.8em;
+            color: #aaa;
+        }
+        .comment-body {
+            white-space: pre-wrap; /* Preserve line breaks in comments */
+            word-wrap: break-word;
+        }
+        /* --- END: New CSS --- */
+
         /* تحسينات للاستجابة */
         @media (max-width: 768px) {
             .container {
                 width: 95%;
                 padding: 20px 15px;
             }
-            
-            .marquee-container {
-                height: 40px;
-            }
-            
-            .marquee-container a {
-                font-size: 1.3em;
-            }
-            
-            .main-content-wrapper {
-                padding-top: 60px;
-            }
-            
-            .bookmarklet-link {
-                padding: 12px 20px;
-                font-size: 16px;
-            }
-            
-            .instructions ol {
-                padding-right: 20px;
-            }
+            .marquee-container { height: 40px; }
+            .marquee-container a { font-size: 1.3em; }
+            .main-content-wrapper { padding-top: 60px; }
+            .bookmarklet-link { padding: 12px 20px; font-size: 16px; }
+            .instructions ol { padding-right: 20px; }
         }
     </style>
 </head>
@@ -164,9 +242,7 @@
     <div class="marquee-container">
         <marquee behavior="scroll" direction="right" scrollamount="6">
             <a href="https://wa.me/201552402912" target="_blank" rel="noopener noreferrer">
-                <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12.04 2.01c-5.52 0-9.99 4.47-9.99 9.99 0 1.77.46 3.45 1.28 4.92L2.01 22l5.25-1.37c1.42.75 3.02 1.2 4.78 1.2h.01c5.52 0 9.99-4.47 9.99-9.99s-4.47-9.99-9.99-9.99zM12.04 20.14h-.01c-1.6 0-3.13-.38-4.49-1.07l-.32-.19-3.33.87.89-3.25-.21-.34c-.79-1.28-1.21-2.78-1.21-4.34 0-4.41 3.58-7.99 7.99-7.99 2.21 0 4.21.86 5.66 2.31 1.45 1.45 2.31 3.45 2.31 5.66-.01 4.41-3.59 7.99-8 7.99zm4.83-5.9c-.27-.13-1.58-.78-1.82-.87-.25-.09-.43-.13-.61.13-.19.27-.69.87-.85 1.04-.16.17-.32.19-.59.06-.27-.13-1.15-.42-2.19-1.35-.81-.72-1.36-1.61-1.52-1.88-.16-.27-.02-.42.12-.55.12-.12.27-.3.4-.45.13-.15.17-.25.25-.42.09-.17.04-.31-.02-.44s-.61-1.45-.83-1.98c-.22-.52-.45-.45-.61-.46-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.02 2.56.12.17 1.76 2.68 4.27 3.77 2.51 1.08 2.51.72 2.96.69.45-.03 1.58-.64 1.8-1.25.23-.61.23-1.13.16-1.25-.07-.12-.25-.19-.52-.32z"/>
-                </svg>
+                <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2.01c-5.52 0-9.99 4.47-9.99 9.99 0 1.77.46 3.45 1.28 4.92L2.01 22l5.25-1.37c1.42.75 3.02 1.2 4.78 1.2h.01c5.52 0 9.99-4.47 9.99-9.99s-4.47-9.99-9.99-9.99zM12.04 20.14h-.01c-1.6 0-3.13-.38-4.49-1.07l-.32-.19-3.33.87.89-3.25-.21-.34c-.79-1.28-1.21-2.78-1.21-4.34 0-4.41 3.58-7.99 7.99-7.99 2.21 0 4.21.86 5.66 2.31 1.45 1.45 2.31 3.45 2.31 5.66-.01 4.41-3.59 7.99-8 7.99zm4.83-5.9c-.27-.13-1.58-.78-1.82-.87-.25-.09-.43-.13-.61.13-.19.27-.69.87-.85 1.04-.16.17-.32.19-.59.06-.27-.13-1.15-.42-2.19-1.35-.81-.72-1.36-1.61-1.52-1.88-.16-.27-.02-.42.12-.55.12-.12.27-.3.4-.45.13-.15.17-.25.25-.42.09-.17.04-.31-.02-.44s-.61-1.45-.83-1.98c-.22-.52-.45-.45-.61-.46-.15-.01-.32-.01-.49-.01-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.02 2.56.12.17 1.76 2.68 4.27 3.77 2.51 1.08 2.51.72 2.96.69.45-.03 1.58-.64 1.8-1.25.23-.61.23-1.13.16-1.25-.07-.12-.25-.19-.52-.32z"/></svg>
                 <span id="marquee-text">مع تحيات استاذ/ محمود عادل صالح</span>
             </a>
         </marquee>
@@ -195,51 +271,167 @@
                          </ol>
                     </div>
                 </section>
+                
+                <!-- --- START: Visitor Counter --- -->
+                <div class="visitor-counter">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <span>إجمالي الزوار: <strong id="visitor-count-number">...</strong></span>
+                </div>
+                <!-- --- END: Visitor Counter --- -->
+
+                <!-- --- START: Comments Section --- -->
+                <section class="comments-section" id="comments">
+                    <h2>شاركنا رأيك أو استفسارك ✏️</h2>
+                    <form id="comment-form" class="comment-form">
+                        <input type="text" id="comment-name" placeholder="اسمك (اختياري)">
+                        <textarea id="comment-message" placeholder="اكتب تعليقك هنا..." required></textarea>
+                        <button type="submit">إرسال التعليق</button>
+                    </form>
+                    <div id="comments-container" class="comments-container">
+                        <!-- Comments will be loaded here dynamically -->
+                    </div>
+                </section>
+                <!-- --- END: Comments Section --- -->
+
             </main>
         </div>
     </div>
     
-    <script>
-        // Function to apply rainbow colors to each word of an element's text
+    <!-- IMPORTANT: The script below is now a module to support modern Firebase SDK -->
+    <script type="module">
+        // --- START: Rainbow Text Effect Script (Your original script) ---
         function applyRainbowColors(element) {
             if (!element || !element.innerText) return;
-
             const words = element.innerText.split(' ');
             element.innerHTML = ''; // Clear the original text
-
             let wordIndex = 0;
             words.forEach((word, index) => {
                 if (word.trim() !== '') {
                     const wordSpan = document.createElement('span');
                     wordSpan.innerText = word;
-                    // Cycle through hues for a pleasant rainbow effect per word
                     const hue = (wordIndex * 35) % 360; 
                     wordSpan.style.color = `hsl(${hue}, 90%, 50%)`;
-                    
-                    // Add hover effect styles directly
                     wordSpan.style.display = 'inline-block';
                     wordSpan.style.transition = 'transform 0.2s ease-in-out';
                     wordSpan.style.cursor = 'pointer';
-                    
-                    // Add hover event listeners
                     wordSpan.addEventListener('mouseenter', () => wordSpan.style.transform = 'scale(1.2)');
                     wordSpan.addEventListener('mouseleave', () => wordSpan.style.transform = 'scale(1)');
-
                     element.appendChild(wordSpan);
                     wordIndex++;
                 }
-                // Add a space after each word to preserve sentence structure
                 if (index < words.length - 1) {
                     element.appendChild(document.createTextNode(' '));
                 }
             });
         }
-
-        // Apply the effect when the page is loaded
         window.addEventListener('DOMContentLoaded', (event) => {
-            const elementsToColor = document.querySelectorAll('#main-title, #sub-title, #bookmarklet h2, .instructions p, .instructions li, #marquee-text');
+            const elementsToColor = document.querySelectorAll('#main-title, #sub-title, #bookmarklet h2, .instructions p, .instructions li, #marquee-text, #comments h2');
             elementsToColor.forEach(applyRainbowColors);
         });
+        // --- END: Rainbow Text Effect Script ---
+
+
+        // --- START: Firebase 9+ (Modular) Logic ---
+
+        // 1. Import functions from the Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, runTransaction, onValue, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        // =======================================================================
+        // 2. ضع إعدادات Firebase الخاصة بك هنا
+        // =======================================================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL", // <-- مهم جدًا
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // =======================================================================
+
+        // 3. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // 4. Visitor Counter Logic
+        const visitorCountRef = ref(db, 'visitors/count');
+        const visitorCountElement = document.getElementById('visitor-count-number');
+
+        // Increment count using a transaction to prevent race conditions
+        runTransaction(visitorCountRef, (currentCount) => {
+            return (currentCount || 0) + 1;
+        });
+
+        // Listen for changes and update the display
+        onValue(visitorCountRef, (snapshot) => {
+            const count = snapshot.val();
+            if (visitorCountElement) {
+                visitorCountElement.textContent = count;
+            }
+        });
+
+        // 5. Comments Logic
+        const commentForm = document.getElementById('comment-form');
+        const commentsContainer = document.getElementById('comments-container');
+        const commentsRef = ref(db, 'comments');
+
+        // Handle Form Submission
+        commentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('comment-name');
+            const messageInput = document.getElementById('comment-message');
+            
+            let name = nameInput.value.trim();
+            const message = messageInput.value.trim();
+            
+            if (!message) {
+                alert('الرجاء كتابة تعليق!');
+                return;
+            }
+            
+            // Default name if left blank
+            if (!name) {
+                name = `زائر رقم ${Math.floor(Math.random() * 1000)}`;
+            }
+            
+            // Create comment object to push to Firebase
+            const newComment = {
+                author: name,
+                text: message,
+                timestamp: new Date().toISOString() // Store date as a standardized string
+            };
+            
+            // Push to Firebase and clear form
+            push(commentsRef, newComment);
+            nameInput.value = '';
+            messageInput.value = '';
+        });
+
+        // Listen for new comments and display them
+        onChildAdded(commentsRef, (snapshot) => {
+            const comment = snapshot.val();
+            
+            // Create the HTML for the new comment
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment-display';
+            
+            const commentDate = new Date(comment.timestamp).toLocaleString('ar-EG');
+            
+            commentDiv.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-author">${comment.author}</span>
+                    <span class="comment-date">${commentDate}</span>
+                </div>
+                <p class="comment-body">${comment.text}</p>
+            `;
+            
+            // Add the new comment to the top of the container
+            commentsContainer.prepend(commentDiv);
+        });
+        // --- END: Firebase Logic ---
     </script>
 </body>
 </html>
